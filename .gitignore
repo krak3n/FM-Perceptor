@@ -1,0 +1,8 @@
+# Vendoring
+vendor
+
+# Binaries
+Perceptor
+
+# Mr Developer
+.env
