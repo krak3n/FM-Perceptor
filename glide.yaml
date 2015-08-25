@@ -1,0 +1,5 @@
+package: main
+import:
+  - package: gopkg.in/redis.v3
+    repo:    https://gopkg.in/redis.v3
+    vcs:     git
