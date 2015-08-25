@@ -2,6 +2,8 @@
 
 package main
 
+import "github.com/Sirupsen/logrus"
+
 // Handles sending messages to all connected clients
 type hub struct {
 	// Stores all connected clients
@@ -20,6 +22,7 @@ type hub struct {
 // Listens on the channels for messages and performs the
 // relivant functionality
 func (h *hub) run() {
+	logrus.Info("Starting Hub")
 	for {
 		select {
 		// On register messages, store the connection

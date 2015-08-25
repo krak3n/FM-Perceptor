@@ -3,9 +3,9 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/websocket"
 )
 
@@ -46,7 +46,9 @@ func serve(w http.ResponseWriter, r *http.Request) {
 
 // Entrypoint - Runs the WS Server
 func main() {
+	log.SetLevel(log.DebugLevel)
 	go h.run()
+	log.Debug("Starting Websocket Server on :9000")
 	http.HandleFunc("/", serve)
 	err := http.ListenAndServe(":9000", nil)
 	if err != nil {
