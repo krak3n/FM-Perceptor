@@ -4,3 +4,7 @@ import:
     ref:     b6ab76f1fe9803ee1d59e7e5b2a797c1fe897ce5
     repo:    https://github.com/gorilla/websocket
     vcs:     git
+  - package: github.com/Sirupsen/logrus
+    ref:     44512f0d08f7f81a75f5b04a2cb6d81ed25431ca
+    repo:    https://github.com/Sirupsen/logrus
+    vcs:     git
