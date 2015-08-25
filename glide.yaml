@@ -1,8 +1,5 @@
-package: main
+package: github.com/thisissoon/FM-Perceptor
 import:
-  - package: gopkg.in/redis.v3
-    repo:    https://gopkg.in/redis.v3
-    vcs:     git
   - package: github.com/gorilla/websocket
     repo:    https://github.com/gorilla/websocket
     vcs:     git

@@ -1,8 +1,11 @@
 # Vendoring
 vendor
+bin
+pkg
 
 # Binaries
 Perceptor
+FM-Perceptor
 
 # Mr Developer
 .env
