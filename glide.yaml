@@ -1,5 +1,6 @@
 package: github.com/thisissoon/FM-Perceptor
 import:
   - package: github.com/gorilla/websocket
+    ref:     b6ab76f1fe9803ee1d59e7e5b2a797c1fe897ce5
     repo:    https://github.com/gorilla/websocket
     vcs:     git
