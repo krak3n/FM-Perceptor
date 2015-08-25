@@ -46,6 +46,7 @@ func serve(w http.ResponseWriter, r *http.Request) {
 
 // Entrypoint - Runs the WS Server
 func main() {
+	go h.run()
 	http.HandleFunc("/", serve)
 	err := http.ListenAndServe(":9000", nil)
 	if err != nil {
