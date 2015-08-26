@@ -20,3 +20,7 @@ import:
     ref:     bda20d5067a03094fc6762f7ead53027afac5f28
     repo:    https://gopkg.in/bsm/ratelimit.v1
     vcs:     git
+  - package: github.com/labstack/echo
+    ref:     2b52bc4ea09e0c4f67db354f548f7e44c3edcc26
+    repo:    https://github.com/labstack/echo
+    vcs:     git
