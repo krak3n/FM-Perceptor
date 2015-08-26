@@ -16,27 +16,31 @@ type subscription struct {
 	channel string
 }
 
-// Consime events from redis, passing them onto the WS hub for
+// Consume events from redis, passing them onto the WS hub for
 // broadcast to clients
 func (s *subscription) consume() {
 	for {
+		// Create a new redis client
 		client := redis.NewClient(&redis.Options{
 			Addr:     s.addr,
 			Password: "", // no password set
 			DB:       0,  // use default DB
 		})
+		// Connect to Redis Pubsub Channel
 		pubsub := client.PubSub()
 		err := pubsub.Subscribe(s.channel)
+		// On error sleep for 1 second, log and continue to the next loop iteration
 		if err != nil {
-			log.Errorf("Redis Connection: %s", err)
+			log.Errorf("Redis Connection Error: %s", err)
 			time.Sleep(time.Second)
 			continue
 		}
-	ReceiveLoop:
+	ReceiveLoop: // Inner loop label
 		for {
 			msg, err := pubsub.Receive() // recieve a message from the channel
 			if err != nil {
-				log.Error(err)
+				// On error, close the channel and break out of the loop inner loop
+				log.Error("Redis Error: %s", err)
 				pubsub.Close()
 				break ReceiveLoop
 			} else {
@@ -47,6 +51,7 @@ func (s *subscription) consume() {
 					// place the messsage on the hub broadcast channel
 					h.broadcast <- []byte(m.Payload)
 				case error:
+					// On error, close the channel and break out of the loop inner loop
 					log.Errorf("Redis Error: %s", m)
 					pubsub.Close()
 					break ReceiveLoop
