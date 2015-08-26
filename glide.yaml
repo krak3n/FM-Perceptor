@@ -8,3 +8,7 @@ import:
     ref:     44512f0d08f7f81a75f5b04a2cb6d81ed25431ca
     repo:    https://github.com/Sirupsen/logrus
     vcs:     git
+  - package: gopkg.in/redis.v3
+    ref:     152c38c687bfd75a1e6faa05944415cfe69c5c7b
+    repo:    https://gopkg.in/redis.v3
+    vcs:     git
