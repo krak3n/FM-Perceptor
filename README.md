@@ -6,6 +6,13 @@ Perceptor is the new SFM\_ events system for websocket communication between the
 This allows the player to connect to the events system without the need for a direct connection
 to Redis, meaning the player no longer needs to connect to the VPN to get events.
 
+The ultilate goal will be to remove Redis as the main events hub, moving to REST pushes to various
+evented services on demand.
+
+<div align="center">
+    <img src="infrastructor.png" />
+</div>
+
 ## Development
 
 This package uses [Glide](https://github.com/Masterminds/glide) for vendoring, please follow the
