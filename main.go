@@ -4,7 +4,6 @@ package main
 
 import (
 	"net/http"
-	"time"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/websocket"
@@ -38,21 +37,10 @@ func serve(w http.ResponseWriter, r *http.Request) {
 	go c.writer()
 }
 
-func broadcast() {
-	for {
-		tick := time.Tick(1 * time.Second)
-		select {
-		case <-tick:
-			h.broadcast <- []byte("tick")
-		}
-	}
-}
-
 // Entrypoint - Runs the WS Server
 func main() {
 	log.SetLevel(log.DebugLevel)
 	go h.run()
-	go broadcast()
 	log.Debug("Starting Websocket Server on :9000")
 	http.HandleFunc("/", serve)
 	err := http.ListenAndServe(":9000", nil)
