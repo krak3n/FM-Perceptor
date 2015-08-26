@@ -19,7 +19,7 @@ var upgrader = websocket.Upgrader{
 
 // Connection handler, upgrades the connection and registers the
 // connection with the hub
-func serve(w http.ResponseWriter, r *http.Request) {
+func serveWS(w http.ResponseWriter, r *http.Request) {
 	// Only support GET requests
 	if r.Method != "GET" {
 		http.Error(w, "Method not allowed", 405)
@@ -53,7 +53,15 @@ func main() {
 	log.Debug("Starting Websocket Server on :9000")
 
 	c := web.New()
-	c.Get("/", serve)
+
+	// WS Connections
+	c.Get("/", serveWS)
+
+	// Event REST endpoints
+	c.Post("/events/play", playHandler)
+	c.Post("/events/end", endHandler)
+	c.Post("/events/volume", volumeHandler)
+	c.Post("/events/mute", muteHandler)
 
 	graceful.ListenAndServe(":9000", c)
 }
