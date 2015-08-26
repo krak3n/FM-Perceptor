@@ -12,3 +12,11 @@ import:
     ref:     152c38c687bfd75a1e6faa05944415cfe69c5c7b
     repo:    https://gopkg.in/redis.v3
     vcs:     git
+  - package: gopkg.in/bufio.v1
+    ref:     567b2bfa514e796916c4747494d6ff5132a1dfce
+    repo:    https://gopkg.in/bufio.v1
+    vcs:     git
+  - package: gopkg.in/bsm/ratelimit.v1
+    ref:     bda20d5067a03094fc6762f7ead53027afac5f28
+    repo:    https://gopkg.in/bsm/ratelimit.v1
+    vcs:     git
