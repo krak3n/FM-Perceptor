@@ -39,9 +39,10 @@ func (h *hub) run() {
 		// On incoming messages, loop over connected clients and send
 		// the message
 		case m := <-h.broadcast:
-			log.Debug("Broadcast Message: ", string(m[:]))
 			for c := range h.connections {
+				log.Debug("Broadcast Message: ", string(m[:]))
 				select {
+				// Put the message on the connections send channel
 				case c.send <- m:
 				default:
 					log.Debug("Client no longer active: ", c.ws.RemoteAddr())

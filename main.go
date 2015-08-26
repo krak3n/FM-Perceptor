@@ -4,6 +4,7 @@ package main
 
 import (
 	"net/http"
+	"time"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/websocket"
@@ -13,15 +14,6 @@ import (
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
-}
-
-// Represents a WS connecton to Perceptor
-type connection struct {
-	// The actual WS connection
-	ws *websocket.Conn
-
-	// A channel to send messages to the connection
-	send chan []byte
 }
 
 // Connection handler, upgrades the connection and registers the
@@ -42,12 +34,25 @@ func serve(w http.ResponseWriter, r *http.Request) {
 	c := &connection{send: make(chan []byte, 256), ws: ws}
 	// Register the connection
 	h.register <- c
+	// Start the writer for the conneciton
+	go c.writer()
+}
+
+func broadcast() {
+	for {
+		tick := time.Tick(1 * time.Second)
+		select {
+		case <-tick:
+			h.broadcast <- []byte("tick")
+		}
+	}
 }
 
 // Entrypoint - Runs the WS Server
 func main() {
 	log.SetLevel(log.DebugLevel)
 	go h.run()
+	go broadcast()
 	log.Debug("Starting Websocket Server on :9000")
 	http.HandleFunc("/", serve)
 	err := http.ListenAndServe(":9000", nil)
