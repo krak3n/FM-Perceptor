@@ -66,18 +66,18 @@ func (c *connection) writer() {
 			if !ok {
 				log.Error("Not Ok")
 				c.write(websocket.CloseMessage, []byte{})
-				return
+				return // break out of the loop
 			}
 			// Attempt to write the message to the connection, catching errors
 			if err := c.write(websocket.TextMessage, m); err != nil {
 				log.Error(err)
-				return // do nothing
+				return // break out of the loop
 			}
 		case <-ticker.C:
 			// Ping the client to keep the connection open
 			if err := c.write(websocket.PingMessage, []byte{}); err != nil {
 				log.Error(err)
-				return // do nothing
+				return // break out of the loop
 			}
 		}
 	}
