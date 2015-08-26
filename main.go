@@ -7,6 +7,8 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/websocket"
+	"github.com/zenazn/goji/graceful"
+	"github.com/zenazn/goji/web"
 )
 
 // Upgrade instance to upgrade the connection
@@ -40,16 +42,18 @@ func serve(w http.ResponseWriter, r *http.Request) {
 // Entrypoint - Runs the WS Server
 func main() {
 	log.SetLevel(log.DebugLevel)
+	// Websocket Message Hub
 	go h.run()
 
 	// Redis Connection
 	s := NewSubscription()
 	go s.consume()
 
+	// Serve the WS Server
 	log.Debug("Starting Websocket Server on :9000")
-	http.HandleFunc("/", serve)
-	err := http.ListenAndServe(":9000", nil)
-	if err != nil {
-		log.Fatal(err)
-	}
+
+	c := web.New()
+	c.Get("/", serve)
+
+	graceful.ListenAndServe(":9000", c)
 }
