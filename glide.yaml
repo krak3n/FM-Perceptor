@@ -24,3 +24,7 @@ import:
     ref:     46b46e00f46dda650e04f0bceeb7c40732cd5988
     repo:    https://github.com/zenazn/goji
     vcs:     git
+  - package: github.com/asaskevich/govalidator
+    ref:     0ac181471c45e5153dd36527926981230f51dfbd
+    repo:    https://github.com/asaskevich/govalidator
+    vcs:     git
