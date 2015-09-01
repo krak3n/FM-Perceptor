@@ -9,6 +9,12 @@ const (
 	startTimeKey    string = "fm:player:start_time"
 )
 
+// Events
+const (
+	playEvent string = "play"
+	endEvent  string = "end"
+)
+
 // Event payload to publish
 type publishEventPayload struct {
 	event string `json:"event"`

@@ -28,7 +28,7 @@ func PublishPlayEvent(c *redis.Client, track string, user string, start string) 
 
 	// Generate message payload
 	payload, err := json.Marshal(&publishEventPayload{
-		event: "play",
+		event: playEvent,
 		track: track,
 		user:  user,
 	})
