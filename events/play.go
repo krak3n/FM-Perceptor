@@ -22,13 +22,13 @@ func PublishPlayEvent(c *redis.Client, track string, user string, start string) 
 	var err error
 
 	// Save Current Track
-	err = c.Set("fm:player:current", string(track), 0).Err()
+	err = c.Set(currentTrackKey, string(track), 0).Err()
 	if err != nil {
 		return err
 	}
 
 	// Save Start Time
-	err = c.Set("fm:player:start_time", string(start), 0).Err()
+	err = c.Set(startTimeKey, string(start), 0).Err()
 	if err != nil {
 		return err
 	}
@@ -44,7 +44,7 @@ func PublishPlayEvent(c *redis.Client, track string, user string, start string) 
 	}
 
 	// Publish Message
-	err = c.Publish("fm:events", string(payload[:])).Err()
+	err = c.Publish(eventsChannel, string(payload[:])).Err()
 	if err != nil {
 		return err
 	}
