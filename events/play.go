@@ -14,16 +14,26 @@ import (
 func PublishPlayEvent(c *redis.Client, track string, user string, start string) error {
 	var err error
 
-	// Save Current Track
-	err = c.Set(currentTrackKey, string(track), 0).Err()
-	if err != nil {
-		return err
-	}
+	// Create Transaction
+	tx := c.Multi()
 
-	// Save Start Time
-	err = c.Set(startTimeKey, string(start), 0).Err()
-	if err != nil {
-		return err
+	// Execute Transaction
+	for {
+		_, err := tx.Exec(func() error {
+			tx.Set(currentTrackKey, string(track), 0)
+			tx.Set(startTimeKey, string(start), 0)
+			tx.Set(pauseKey, "0", 0)
+			tx.Del(pauseTimeKey)
+			tx.Del(pauseDurrationKey)
+			return nil
+		})
+		if err == redis.TxFailedErr {
+			// Retry.
+			continue
+		} else if err != nil {
+			return err
+		}
+		break
 	}
 
 	// Generate message payload

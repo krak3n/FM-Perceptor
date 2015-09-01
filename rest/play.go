@@ -1,4 +1,5 @@
 // Handling REST Calls to /events/play
+// Called when the player starts playing a track
 
 package rest
 
