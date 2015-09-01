@@ -7,6 +7,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/websocket"
+	"github.com/thisissoon/FM-Perceptor/rest"
 	"github.com/zenazn/goji/graceful"
 	"github.com/zenazn/goji/web"
 )
@@ -60,7 +61,7 @@ func main() {
 	c.Get("/", serveWS)
 
 	// Event REST endpoints
-	c.Post("/events/play", playHandler)
+	c.Post("/events/play", rest.PlayCreateHandler)
 	c.Post("/events/end", endHandler)
 	c.Post("/events/volume", volumeHandler)
 	c.Post("/events/mute", muteHandler)
