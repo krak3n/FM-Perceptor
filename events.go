@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 
 	v "github.com/asaskevich/govalidator"
 	"github.com/zenazn/goji/web"
@@ -34,16 +33,6 @@ func playHandler(c web.C, w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(400), 400)
 		return
 	}
-
-	// Custom Validator
-	v.TagMap["iso8601"] = v.Validator(func(str string) bool {
-		_, err := time.Parse(time.RFC3339, str)
-		if err != nil {
-			return false
-		}
-
-		return true
-	})
 
 	// Validate
 	res, err := v.ValidateStruct(event)
