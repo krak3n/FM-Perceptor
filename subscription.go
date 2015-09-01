@@ -12,7 +12,7 @@ import (
 
 // Redis event subscription
 type subscription struct {
-	addr    string
+	client  *redis.Client
 	channel string
 }
 
@@ -20,12 +20,7 @@ type subscription struct {
 // broadcast to clients
 func (s *subscription) consume() {
 	for {
-		// Create a new redis client
-		client := redis.NewClient(&redis.Options{
-			Addr:     s.addr,
-			Password: "", // no password set
-			DB:       0,  // use default DB
-		})
+		client := s.client
 		// Connect to Redis Pubsub Channel
 		pubsub := client.PubSub()
 		err := pubsub.Subscribe(s.channel)
@@ -63,8 +58,16 @@ func (s *subscription) consume() {
 
 // Create a new Redis Subscription
 func NewSubscription() *subscription {
+	// Create a new redis client - this does not connect to redis
+	client := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+
+	// Create a new subscription
 	return &subscription{
-		addr:    "localhost:6379",
+		client:  client,
 		channel: "fm:events",
 	}
 }
