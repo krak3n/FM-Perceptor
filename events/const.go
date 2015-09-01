@@ -4,9 +4,12 @@ package events
 
 // Redis Keys
 const (
-	eventsChannel   string = "fm:events"
-	currentTrackKey string = "fm:player:current"
-	startTimeKey    string = "fm:player:start_time"
+	eventsChannel     string = "fm:events"
+	currentTrackKey   string = "fm:player:current"
+	startTimeKey      string = "fm:player:start_time"
+	pauseKey          string = "fm:player:paused"
+	pauseTimeKey      string = "fm:player:pause_time"
+	pauseDurrationKey string = "fm:player:pause_duration"
 )
 
 // Events
