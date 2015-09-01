@@ -65,7 +65,7 @@ func main() {
 	c.Post("/events/end", rest.EndCreateHandler)
 	c.Post("/events/pause", rest.PauseCreateHandler)
 	c.Post("/events/resume", rest.ResumeCreateHandler)
-	c.Post("/events/volume", volumeHandler)
+	c.Put("/events/volume", rest.VolumeUpdateHandler)
 	c.Post("/events/mute", muteHandler)
 
 	graceful.ListenAndServe(":9000", c)

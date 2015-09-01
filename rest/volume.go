@@ -1,4 +1,5 @@
-// Resume Event Handler
+// Handle Volume Change Events
+// Called when the players alters its Volume from a user drivem event
 
 package rest
 
@@ -13,17 +14,15 @@ import (
 	"gopkg.in/redis.v3"
 )
 
-// POST /events/resume JSON Request Body
-type resumeCreateReqBody struct {
-	durration string `json:"start" valid:"int,required"`
+// PUT /volume Request Body
+type volumeUpdateReqBody struct {
+	level int `json:"level" valid:"required"`
 }
 
-// POST /player/resume HTTP Handler
-// The player will send the durration the player was paused for - this is then
-// used to calculate time remaining of the current song
-func ResumeCreateHandler(c web.C, w http.ResponseWriter, r *http.Request) {
+// PUT /volume HTTP Handler
+func VolumeUpdateHandler(c web.C, w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
-	rbody := &resumeCreateReqBody{}
+	rbody := &volumeUpdateReqBody{}
 
 	// Decode JSON
 	err := decoder.Decode(&rbody)
@@ -41,13 +40,13 @@ func ResumeCreateHandler(c web.C, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Set the resume redis keys
-	if err := events.SetResumeState(c.Env["REDIS"].(*redis.Client), rbody.durration); err != nil {
+	// Set the vol redis keys
+	if err := events.PublishVolumeEvent(c.Env["REDIS"].(*redis.Client), rbody.level); err != nil {
 		log.Error(err)
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
 
 	// We got here! It's alllll good.
-	w.WriteHeader(201)
+	w.WriteHeader(200)
 }

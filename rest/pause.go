@@ -44,7 +44,7 @@ func PauseCreateHandler(c web.C, w http.ResponseWriter, r *http.Request) {
 	// Set the pause redis keys
 	if err := events.SetPauseState(c.Env["REDIS"].(*redis.Client), rbody.Start); err != nil {
 		log.Error(err)
-		http.Error(w, http.StatusText(422), 422)
+		http.Error(w, http.StatusText(500), 500)
 		return
 	}
 

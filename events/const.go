@@ -10,12 +10,15 @@ const (
 	pauseKey          string = "fm:player:paused"
 	pauseTimeKey      string = "fm:player:pause_time"
 	pauseDurrationKey string = "fm:player:pause_duration"
+	volumeKey         string = "fm:player:volume"
+	muteKey           string = "fm:player:mute"
 )
 
 // Events
 const (
-	playEvent string = "play"
-	endEvent  string = "end"
+	playEvent   string = "play"
+	endEvent    string = "end"
+	volumeEvent string = "volume"
 )
 
 // Event payload to publish
