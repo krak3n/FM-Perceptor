@@ -62,7 +62,7 @@ func main() {
 
 	// Event REST endpoints
 	c.Post("/events/play", rest.PlayCreateHandler)
-	c.Post("/events/end", endHandler)
+	c.Post("/events/end", rest.EndCreateHandler)
 	c.Post("/events/volume", volumeHandler)
 	c.Post("/events/mute", muteHandler)
 
