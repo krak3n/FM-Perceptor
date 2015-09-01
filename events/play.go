@@ -8,13 +8,6 @@ import (
 	"gopkg.in/redis.v3"
 )
 
-// Represents the publish event json payload
-type publishEventPayload struct {
-	event string `json:"event"`
-	track string `json:"uri"`
-	user  string `json:"user"`
-}
-
 // Publish a Play Event from the Player to Redis. This sets the current
 // playing track, the user and start time as well as publishing to the
 // event channel
