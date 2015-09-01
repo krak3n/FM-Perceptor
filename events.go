@@ -8,27 +8,15 @@ import (
 	"net/http"
 
 	v "github.com/asaskevich/govalidator"
+	"github.com/thisissoon/FM-Perceptor/events"
 	"github.com/zenazn/goji/web"
 	"gopkg.in/redis.v3"
 )
 
-const (
-	CURRENT_KEY    string = "fm:player:current"
-	START_TIME_KEY string = "fm:player:start_time"
-	PLAY_EVENT     string = "play"
-	EVENT_KEY      string = "fm:events"
-)
-
 type playEvent struct {
 	Start string `json:"start" valid:"iso8601,required"`
-	Uri   string `json:"uri" valid:"required"`
+	Track string `json:"uri" valid:"required"`
 	User  string `json:"user" valid:"required"`
-}
-
-type PublishEvent struct {
-	Event string `json:"event"`
-	Uri   string `json:"uri"`
-	User  string `json:"user"`
 }
 
 // Handle sending a play event (POST /events/play)
@@ -36,6 +24,7 @@ func playHandler(c web.C, w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	event := &playEvent{}
 
+	// Decode JSON
 	err := decoder.Decode(&event)
 	if err != nil {
 		http.Error(w, http.StatusText(400), 400)
@@ -51,37 +40,13 @@ func playHandler(c web.C, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Redis Client
-	red := c.Env["REDIS"].(*redis.Client)
+	// Publish event
+	if err := events.PublishPlayEvent(
+		c.Env["REDIS"].(*redis.Client),
+		event.Track,
+		event.User,
+		event.Start); err != nil {
 
-	// Save Current Track
-	err = red.Set(CURRENT_KEY, string(event.Uri), 0).Err()
-	if err != nil {
-		http.Error(w, http.StatusText(500), 500)
-		return
-	}
-
-	// Save Start Time
-	err = red.Set(START_TIME_KEY, string(event.Start), 0).Err()
-	if err != nil {
-		http.Error(w, http.StatusText(500), 500)
-		return
-	}
-
-	// Publish
-	message, err := json.Marshal(&PublishEvent{
-		Event: PLAY_EVENT,
-		Uri:   event.Uri,
-		User:  event.User,
-	})
-	if err != nil {
-		http.Error(w, http.StatusText(500), 500)
-		return
-	}
-
-	// Publish Message
-	err = red.Publish(EVENT_KEY, string(message[:])).Err()
-	if err != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
