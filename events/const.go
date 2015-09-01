@@ -18,7 +18,8 @@ const (
 const (
 	playEvent   string = "play"
 	endEvent    string = "end"
-	volumeEvent string = "volume"
+	volumeEvent string = "volume_changed"
+	muteEvent   string = "mute_changed"
 )
 
 // Event payload to publish

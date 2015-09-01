@@ -21,22 +21,8 @@ type publishVolumePayload struct {
 func PublishVolumeEvent(c *redis.Client, level int) error {
 	var err error
 
-	// Create Transaction
-	tx := c.Multi()
-
-	// Execute Transaction
-	for {
-		_, err := tx.Exec(func() error {
-			tx.Set(volumeKey, strconv.Itoa(level), 0)
-			return nil
-		})
-		if err == redis.TxFailedErr {
-			// Retry.
-			continue
-		} else if err != nil {
-			return err
-		}
-		break
+	if err = c.Set(volumeKey, strconv.Itoa(level), 0).Err(); err != nil {
+		return err
 	}
 
 	// Generate message payload
@@ -49,8 +35,12 @@ func PublishVolumeEvent(c *redis.Client, level int) error {
 	}
 
 	// Publish Message
-	err = c.Publish(eventsChannel, string(payload[:])).Err()
-	if err != nil {
+	if err = c.Publish(eventsChannel, string(payload[:])).Err(); err != nil {
+		return err
+	}
+
+	// Also Publish mute change to false
+	if err = PublishMuteEvent(c, false); err != nil {
 		return err
 	}
 
