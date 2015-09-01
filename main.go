@@ -53,6 +53,7 @@ func main() {
 	log.Debug("Starting Websocket Server on :9000")
 
 	c := web.New()
+	c.Use(RedisClient)
 
 	// WS Connections
 	c.Get("/", serveWS)
