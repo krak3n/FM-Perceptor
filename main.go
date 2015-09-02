@@ -70,5 +70,8 @@ func main() {
 	c.Put("/volume", rest.VolumeUpdateHandler)
 	c.Put("/mute", rest.MuteUpdateHandler)
 
+	//
+	c.Get("/playlist/next", rest.GetNextTrackHandler)
+
 	graceful.ListenAndServe(":9000", c)
 }
