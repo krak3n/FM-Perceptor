@@ -28,3 +28,7 @@ import:
     ref:     0ac181471c45e5153dd36527926981230f51dfbd
     repo:    https://github.com/asaskevich/govalidator
     vcs:     git
+  - package: github.com/spf13/viper
+    ref:     3c0ff861e3d9906ecc4ebfb7e41557d44d3e277b
+    repo:    https://github.com/spf13/viper
+    vcs:     git
