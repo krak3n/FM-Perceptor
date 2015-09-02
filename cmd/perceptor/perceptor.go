@@ -4,6 +4,7 @@ package main
 
 import (
 	log "github.com/Sirupsen/logrus"
+	"github.com/spf13/viper"
 	"github.com/thisissoon/FM-Perceptor/middleware"
 	"github.com/thisissoon/FM-Perceptor/pubsub"
 	"github.com/thisissoon/FM-Perceptor/rest"
@@ -12,7 +13,20 @@ import (
 	"github.com/zenazn/goji/web"
 )
 
-// Entrypoint - Runs the WS Server
+func init() {
+	viper.SetConfigName("perceptor")        // name of config file (without extension)
+	viper.AddConfigPath("/etc/perceptor/")  // path to look for the config file in
+	viper.AddConfigPath("$HOME/.perceptor") // call multiple times to add many search paths
+	viper.AddConfigPath("$PWD/.perceptor")  // call multiple times to add many search paths
+	err := viper.ReadInConfig()             // Find and read the config file
+	if err != nil {                         // Handle errors reading the config file
+		log.Warnf("No config file found or is not properly formatted: %s", err)
+	} else {
+		log.Info("Config Loaded from File")
+	}
+}
+
+// Application Entrypoint
 func main() {
 	log.SetLevel(log.DebugLevel)
 

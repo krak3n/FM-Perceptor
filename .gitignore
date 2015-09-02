@@ -5,6 +5,7 @@ pkg
 
 # Binaries
 /perceptor
+/.perceptor
 
 # Mr Developer
 .env
