@@ -54,6 +54,9 @@ func main() {
 	log.Debug("Starting Websocket Server on :9000")
 
 	c := web.New()
+
+	// Middlewares
+	c.Use(HMACVerification)
 	c.Use(CustomValidators)
 	c.Use(RedisClient)
 
