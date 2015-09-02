@@ -1,7 +1,7 @@
 // Temporary Redis Event Subscription to pass events from
 // API's to the Player clients
 
-package main
+package pubsub
 
 import (
 	"time"
@@ -12,7 +12,7 @@ import (
 )
 
 // Redis event subscription
-type subscription struct {
+type Subscription struct {
 	hub     socket.Hub
 	client  *redis.Client
 	channel string
@@ -20,7 +20,7 @@ type subscription struct {
 
 // Consume events from redis, passing them onto the WS hub for
 // broadcast to clients
-func (s *subscription) consume() {
+func (s *Subscription) Consume() {
 	for {
 		client := s.client
 		// Connect to Redis Pubsub Channel
@@ -59,7 +59,7 @@ func (s *subscription) consume() {
 }
 
 // Create a new Redis Subscription
-func NewSubscription(h socket.Hub) *subscription {
+func NewSubscription(h socket.Hub) *Subscription {
 	// Create a new redis client - this does not connect to redis
 	client := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
@@ -68,7 +68,7 @@ func NewSubscription(h socket.Hub) *subscription {
 	})
 
 	// Create a new subscription
-	return &subscription{
+	return &Subscription{
 		hub:     h,
 		client:  client,
 		channel: "fm:events",

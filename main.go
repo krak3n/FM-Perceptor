@@ -5,6 +5,7 @@ package main
 import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/thisissoon/FM-Perceptor/middleware"
+	"github.com/thisissoon/FM-Perceptor/pubsub"
 	"github.com/thisissoon/FM-Perceptor/rest"
 	"github.com/thisissoon/FM-Perceptor/socket"
 	"github.com/zenazn/goji/graceful"
@@ -23,8 +24,8 @@ func main() {
 	ws := socket.NewWSService(hub)
 
 	// Redis Connection
-	s := NewSubscription(hub)
-	go s.consume()
+	s := pubsub.NewSubscription(hub)
+	go s.Consume()
 
 	// Serve the WS Server
 	log.Debug("Starting Websocket Server on :9000")
