@@ -4,8 +4,7 @@ bin
 pkg
 
 # Binaries
-Perceptor
-FM-Perceptor
+/perceptor
 
 # Mr Developer
 .env

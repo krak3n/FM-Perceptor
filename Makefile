@@ -5,7 +5,7 @@
 #
 
 build:
-	go build $(glide nv)
+	go build ./cmd/perceptor
 
 install:
-	go install $(glide nv)
+	go install ./cmd/perceptor
