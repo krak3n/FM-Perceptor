@@ -7,6 +7,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/websocket"
+	"github.com/thisissoon/FM-Perceptor/middleware"
 	"github.com/thisissoon/FM-Perceptor/rest"
 	"github.com/zenazn/goji/graceful"
 	"github.com/zenazn/goji/web"
@@ -56,9 +57,10 @@ func main() {
 	c := web.New()
 
 	// Middlewares
-	c.Use(HMACVerification)
-	c.Use(CustomValidators)
-	c.Use(RedisClient)
+	c.Use(middleware.SetupEnv)
+	c.Use(middleware.HMACVerification)
+	c.Use(middleware.CustomValidators)
+	c.Use(middleware.RedisClient)
 
 	// WS Connections
 	c.Get("/", serveWS)
