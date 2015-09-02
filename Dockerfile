@@ -8,9 +8,9 @@ RUN echo 'http://dl-4.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositories
 ENV GOPATH=/perceptor
 ENV GO15VENDOREXPERIMENT=1
 
-COPY . /perceptor/src/github.com/thisissoon/FM-Perceptor
-
 WORKDIR /perceptor/src/github.com/thisissoon/FM-Perceptor
+
+COPY . /perceptor/src/github.com/thisissoon/FM-Perceptor
 
 RUN glide up && make install && ln -s /perceptor/bin/perceptor /usr/local/bin/perceptor
 
