@@ -32,3 +32,39 @@ import:
     ref:     3c0ff861e3d9906ecc4ebfb7e41557d44d3e277b
     repo:    https://github.com/spf13/viper
     vcs:     git
+  - package: github.com/BurntSushi/toml
+    ref:     056c9bc7be7190eaa7715723883caffa5f8fa3e4
+    repo:    https://github.com/BurntSushi/toml
+    vcs:     git
+  - package: github.com/spf13/pflag
+    ref:     8e7dc108ab3a1ab6ce6d922bbaff5657b88e8e49
+    repo:    https://github.com/spf13/pflag
+    vcs:     git
+  - package: gopkg.in/yaml.v2
+    ref:     7ad95dd0798a40da1ccdff6dff35fd177b5edf40
+    repo:    https://gopkg.in/yaml.v2
+    vcs:     git
+  - package: github.com/spf13/jwalterweatherman
+    ref:     3d60171a64319ef63c78bd45bd60e6eab1e75f8b
+    repo:    https://github.com/spf13/jwalterweatherman
+    vcs:     git
+  - package: github.com/mitchellh/mapstructure
+    ref:     281073eb9eb092240d33ef253c404f1cca550309
+    repo:    https://github.com/mitchellh/mapstructure
+    vcs:     git
+  - package: github.com/spf13/cast
+    ref:     ee815aaf958c707ad07547cd62150d973710f747
+    repo:    https://github.com/spf13/cast
+    vcs:     git
+  - package: github.com/kr/pretty
+    ref:     e6ac2fc51e89a3249e82157fa0bb7a18ef9dd5bb
+    repo:    https://github.com/kr/pretty
+    vcs:     git
+  - package: github.com/kr/text
+    ref:     e373e137fafd8abd480af49182dea0513914adb4
+    repo:    https://github.com/kr/text
+    vcs:     git
+  - package: github.com/magiconair/properties
+    ref:     337395e44efb4affc8bf11971e22acbd4e27a32d
+    repo:    https://github.com/magiconair/properties
+    vcs:     git
