@@ -41,9 +41,15 @@ clients:
 In addition Redis connection settings and the port `perceptor` will run on can also be configured:
 
 ``` yaml
+# Port to run perceptor on
 port: 9000
+# The log verbosity level (debug, info, wan, error)
+log_leveL: debug
+# Redis Host Address
 redis_host: 127.0.0.1
+# Redis Port
 redis_port: 6379
+# Client Secrets - For HMAC Verification
 clients:
   soundwave: foo
   shockwave: bar
@@ -60,6 +66,7 @@ docker run --rm -it -v /path/to/perceptor.yml:/etc/perceptor/perceptor.yml regis
 In addition the following environment variables can override configuration:
 
 * `PERCEPTOR_PORT` - The port `perceptor` runs on
+* `PERCEPTOR_LOG_LEVEL` - The verbosity of the logging (`debug`, `info`, `warn`, `error`)
 * `PERCEPTOR_REDIS_HOST` - Redis Host Address (`localhost`)
 * `PERCEPTOR_REDIS_PORT` - Redis Port (`6379`)
 

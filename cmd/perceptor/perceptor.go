@@ -16,11 +16,12 @@ import (
 )
 
 func init() {
-	// Set Log Level
-	log.SetLevel(log.DebugLevel)
+	// Default log level - Warn
+	log.SetLevel(log.WarnLevel)
 
 	// Defaults
 	viper.SetDefault("port", "5000")
+	viper.SetDefault("log_level", "warn")
 	viper.SetDefault("redis_host", "127.0.0.1")
 	viper.SetDefault("redis_port", "6379")
 	viper.SetDefault("clients", map[string]string{
@@ -36,13 +37,24 @@ func init() {
 	err := viper.ReadInConfig()             // Find and read the config file
 	if err != nil {                         // Handle errors reading the config file
 		log.Warnf("No config file found or is not properly formatted: %s", err)
-	} else {
-		log.Info("Config Loaded from File")
 	}
 
 	// From environment vars - Only top level are configured from env vars
 	viper.SetEnvPrefix("perceptor")
 	viper.AutomaticEnv()
+
+	switch viper.GetString("log_level") {
+	case "debug":
+		log.SetLevel(log.DebugLevel)
+	case "info":
+		log.SetLevel(log.InfoLevel)
+	case "warn":
+		log.SetLevel(log.WarnLevel)
+	case "error":
+		log.SetLevel(log.ErrorLevel)
+	default:
+		log.SetLevel(log.WarnLevel)
+	}
 
 	// Warn of Secrets have not been set
 	for k, v := range viper.GetStringMapString("clients") {
@@ -93,6 +105,6 @@ func main() {
 	c.Get("/playlist/next", rest.GetNextTrackHandler)
 
 	// Start Serving Web Application
-	log.Debugf("Starting Server on :%s", viper.GetString("port"))
+	log.Infof("Starting Server on :%s", viper.GetString("port"))
 	graceful.ListenAndServe(fmt.Sprintf(":%s", viper.GetString("port")), c)
 }
