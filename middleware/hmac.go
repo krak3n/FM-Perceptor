@@ -7,10 +7,12 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/spf13/viper"
 	"github.com/zenazn/goji/web"
 )
 
@@ -30,17 +32,16 @@ func HMACVerification(c *web.C, h http.Handler) http.Handler {
 			return
 		}
 		// Assign vars for easy ref
-		// client_id := creds[0]
-		client_sig := creds[1]
+		secret := viper.GetString(fmt.Sprintf("clients.%s", creds[0]))
+		sig := string(creds[1][:])
 		// Get the Secret Key for the Client
-		secret := "foo" // TODO: get from somewhere
 		// Encode he request body
 		mac := hmac.New(sha256.New, []byte(secret))
 		mac.Write(request_data)
 		expected_sig := base64.StdEncoding.EncodeToString(mac.Sum(nil))
 		// Ensure Signatures match
-		if string(client_sig[:]) != expected_sig {
-			log.Warn("Invalid HMAC Signature - Possible Man in the Middle Attack")
+		if sig != expected_sig {
+			log.Warn("Invalid HMAC Signature")
 			http.Error(w, http.StatusText(400), 400)
 			return
 		}

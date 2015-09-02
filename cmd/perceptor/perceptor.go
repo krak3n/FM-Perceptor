@@ -23,6 +23,10 @@ func init() {
 	viper.SetDefault("port", "5000")
 	viper.SetDefault("redis_host", "127.0.0.1")
 	viper.SetDefault("redis_port", "6379")
+	viper.SetDefault("clients", map[string]string{
+		"soundwave": "CHANGE_ME",
+		"shockwave": "CHANGE_ME",
+	})
 
 	// From file
 	viper.SetConfigName("perceptor")        // name of config file (without extension)
@@ -39,6 +43,13 @@ func init() {
 	// From environment vars - Only top level are configured from env vars
 	viper.SetEnvPrefix("perceptor")
 	viper.AutomaticEnv()
+
+	// Warn of Secrets have not been set
+	for k, v := range viper.GetStringMapString("clients") {
+		if v == "CHANGE_ME" || v == "SECRET" {
+			log.Warnf("Client key (%s) has not been set", k)
+		}
+	}
 }
 
 // Application Entrypoint
