@@ -4,6 +4,7 @@
 package pubsub
 
 import (
+	"fmt"
 	"time"
 
 	log "github.com/Sirupsen/logrus"
@@ -59,13 +60,15 @@ func (s *Subscription) Consume() {
 }
 
 // Create a new Redis Subscription
-func NewSubscription(h socket.Hub) *Subscription {
+func NewSubscription(h socket.Hub, host string, port string) *Subscription {
 	// Create a new redis client - this does not connect to redis
 	client := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     fmt.Sprintf("%s:%s", host, port),
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
+
+	log.Debugf("Redis Subscribe @ %s:%s", host, port)
 
 	// Create a new subscription
 	return &Subscription{

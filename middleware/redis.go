@@ -5,9 +5,11 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/spf13/viper"
 	"github.com/zenazn/goji/web"
 	"gopkg.in/redis.v3"
 )
@@ -16,12 +18,12 @@ import (
 func RedisClient(c *web.C, h http.Handler) http.Handler {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		c.Env["REDIS"] = redis.NewClient(&redis.Options{
-			Addr:     "localhost:6379",
+			Addr:     fmt.Sprintf("%s:%s", viper.GetString("redis_host"), viper.GetString("redis_port")),
 			Password: "", // no password set
 			DB:       0,  // use default DB
 		})
 
-		log.Debug("Redis Client Created")
+		log.Debugf("Redis @ %s:%s", viper.GetString("redis_host"), viper.GetString("redis_port"))
 
 		// Call the next handler
 		h.ServeHTTP(w, r)

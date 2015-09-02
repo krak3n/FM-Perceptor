@@ -3,6 +3,8 @@
 package main
 
 import (
+	"fmt"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/spf13/viper"
 	"github.com/thisissoon/FM-Perceptor/middleware"
@@ -14,6 +16,15 @@ import (
 )
 
 func init() {
+	// Set Log Level
+	log.SetLevel(log.DebugLevel)
+
+	// Defaults
+	viper.SetDefault("port", "5000")
+	viper.SetDefault("redis_host", "127.0.0.1")
+	viper.SetDefault("redis_port", "6379")
+
+	// From file
 	viper.SetConfigName("perceptor")        // name of config file (without extension)
 	viper.AddConfigPath("/etc/perceptor/")  // path to look for the config file in
 	viper.AddConfigPath("$HOME/.perceptor") // call multiple times to add many search paths
@@ -24,12 +35,14 @@ func init() {
 	} else {
 		log.Info("Config Loaded from File")
 	}
+
+	// From environment vars - Only top level are configured from env vars
+	viper.SetEnvPrefix("perceptor")
+	viper.AutomaticEnv()
 }
 
 // Application Entrypoint
 func main() {
-	log.SetLevel(log.DebugLevel)
-
 	// Message Hub
 	hub := socket.NewHub()
 	go hub.Run()
@@ -37,12 +50,12 @@ func main() {
 	// WS Service
 	ws := socket.NewWSService(hub)
 
-	// Redis Connection
-	s := pubsub.NewSubscription(hub)
+	// Redis Subscription
+	s := pubsub.NewSubscription(
+		hub,
+		viper.GetString("redis_host"),
+		viper.GetString("redis_port"))
 	go s.Consume()
-
-	// Serve the WS Server
-	log.Debug("Starting Websocket Server on :9000")
 
 	c := web.New()
 
@@ -68,5 +81,7 @@ func main() {
 	// Get the next track from the playlist
 	c.Get("/playlist/next", rest.GetNextTrackHandler)
 
-	graceful.ListenAndServe(":9000", c)
+	// Start Serving Web Application
+	log.Debugf("Starting Server on :%s", viper.GetString("port"))
+	graceful.ListenAndServe(fmt.Sprintf(":%s", viper.GetString("port")), c)
 }
