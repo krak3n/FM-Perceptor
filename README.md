@@ -13,6 +13,56 @@ evented services on demand.
     <img src="infrastructor.png" />
 </div>
 
+## Running
+
+Perceptor can be run via Docker. Simply download the image and run:
+
+```
+docker pull registry.soon.build/fm/perceptor
+docker run --rm -it registry.soon.build/fm/perceptor
+```
+
+### Configuration
+
+Perceptor can be configured via a config file located in any of the following locations:
+
+* `/etc/perceptor/perceptor.yml`
+* `$HOME/.perceptor/perceptor.yml`
+* `$PWD/.perceptor/perceptor.yml`
+
+The config file atleast needs to set client secrets for HMAC request verification:
+
+``` yaml
+clients:
+  soundwave: foo
+  shockwave: bar
+```
+
+In addition Redis connection settings and the port `perceptor` will run on can also be configured:
+
+``` yaml
+port: 9000
+redis_host: 127.0.0.1
+redis_port: 6379
+clients:
+  soundwave: foo
+  shockwave: bar
+```
+
+You can share this file with the docker container, for example:
+
+```
+docker run --rm -it -v /path/to/perceptor.yml:/etc/perceptor/perceptor.yml registry.soon.build/fm/perceptor
+```
+
+#### Environment Variables
+
+In addition the following environment variables can override configuration:
+
+* `PERCEPTOR_PORT` - The port `perceptor` runs on
+* `PERCEPTOR_REDIS_HOST` - Redis Host Address (`localhost`)
+* `PERCEPTOR_REDIS_PORT` - Redis Port (`6379`)
+
 ## Development
 
 This package uses [Glide](https://github.com/Masterminds/glide) for vendoring, please follow the
