@@ -7,11 +7,13 @@ import (
 	"time"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/thisissoon/FM-Perceptor/socket"
 	"gopkg.in/redis.v3"
 )
 
 // Redis event subscription
 type subscription struct {
+	hub     socket.Hub
 	client  *redis.Client
 	channel string
 }
@@ -44,7 +46,7 @@ func (s *subscription) consume() {
 					log.Debugf("Subscribed: %s", m.Channel)
 				case *redis.Message:
 					// place the messsage on the hub broadcast channel
-					h.broadcast <- []byte(m.Payload)
+					s.hub.Broadcast <- []byte(m.Payload)
 				case error:
 					// On error, close the channel and break out of the loop inner loop
 					log.Errorf("Redis Error: %s", m)
@@ -57,7 +59,7 @@ func (s *subscription) consume() {
 }
 
 // Create a new Redis Subscription
-func NewSubscription() *subscription {
+func NewSubscription(h socket.Hub) *subscription {
 	// Create a new redis client - this does not connect to redis
 	client := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
@@ -67,6 +69,7 @@ func NewSubscription() *subscription {
 
 	// Create a new subscription
 	return &subscription{
+		hub:     h,
 		client:  client,
 		channel: "fm:events",
 	}

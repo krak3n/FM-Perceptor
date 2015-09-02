@@ -1,16 +1,16 @@
-// Handles registering / unregistering / sending messages to connected clients
+// Sets up a Message Hub
 
-package main
+package socket
 
 import log "github.com/Sirupsen/logrus"
 
 // Handles sending messages to all connected clients
-type hub struct {
+type Hub struct {
 	// Stores all connected clients
 	connections map[*connection]bool
 
 	// Messages to broadcast to the connected clients
-	broadcast chan []byte
+	Broadcast chan []byte
 
 	// Register a new client
 	register chan *connection
@@ -21,7 +21,7 @@ type hub struct {
 
 // Listens on the channels for messages and performs the
 // relivant functionality
-func (h *hub) run() {
+func (h *Hub) Run() {
 	log.Info("Starting Hub")
 	for {
 		select {
@@ -38,7 +38,7 @@ func (h *hub) run() {
 			}
 		// On incoming messages, loop over connected clients and send
 		// the message
-		case m := <-h.broadcast:
+		case m := <-h.Broadcast:
 			for c := range h.connections {
 				log.Debug("Broadcast Message: ", string(m[:]))
 				select {
@@ -54,10 +54,12 @@ func (h *hub) run() {
 	}
 }
 
-// Create a new instance of the hub
-var h = hub{
-	broadcast:   make(chan []byte),
-	register:    make(chan *connection),
-	unregister:  make(chan *connection),
-	connections: make(map[*connection]bool),
+// Create a new message hub
+func NewHub() Hub {
+	return Hub{
+		Broadcast:   make(chan []byte),
+		register:    make(chan *connection),
+		unregister:  make(chan *connection),
+		connections: make(map[*connection]bool),
+	}
 }

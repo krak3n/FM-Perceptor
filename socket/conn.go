@@ -1,7 +1,7 @@
 // Handles WS Connections as well as Sending / Recieving Messages
 // from conected clients
 
-package main
+package socket
 
 import (
 	"net"
