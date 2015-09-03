@@ -10,8 +10,10 @@ ENV GO15VENDOREXPERIMENT=1
 
 WORKDIR /perceptor/src/github.com/thisissoon/FM-Perceptor
 
-COPY . /perceptor/src/github.com/thisissoon/FM-Perceptor
+COPY ./glide.yaml /perceptor/src/github.com/thisissoon/FM-Perceptor/glide.yaml
+RUN glide up
 
-RUN glide up && make install && ln -s /perceptor/bin/perceptor /usr/local/bin/perceptor
+COPY . /perceptor/src/github.com/thisissoon/FM-Perceptor
+RUN make install && ln -s /perceptor/bin/perceptor /usr/local/bin/perceptor
 
 ENTRYPOINT perceptor
