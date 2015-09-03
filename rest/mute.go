@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	log "github.com/Sirupsen/logrus"
-	v "github.com/asaskevich/govalidator"
 	"github.com/thisissoon/FM-Perceptor/events"
 	"github.com/zenazn/goji/web"
 	"gopkg.in/redis.v3"
@@ -15,7 +14,7 @@ import (
 
 // PUT /mute Request Body
 type muteUpdateReqBody struct {
-	Active bool `json:"active" valid:"required"`
+	Active bool `json:"active"`
 }
 
 // PUT /mute HTTP Handler
@@ -28,14 +27,6 @@ func MuteUpdateHandler(c web.C, w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Debug(err)
 		http.Error(w, http.StatusText(400), 400)
-		return
-	}
-
-	// Validate
-	res, err := v.ValidateStruct(rbody)
-	if err != nil {
-		log.Debug(res)
-		http.Error(w, http.StatusText(422), 422)
 		return
 	}
 
