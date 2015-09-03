@@ -20,11 +20,9 @@ type publishMutePayload struct {
 func PublishMuteEvent(c *redis.Client, active bool) error {
 	var err error
 
-	var state string
+	state := "0"
 	if active {
 		state = "1"
-	} else {
-		state = "0"
 	}
 
 	// Set mute state on Redis

@@ -11,8 +11,8 @@ import (
 
 // Play POST request expected JSON payload
 type publishVolumePayload struct {
-	event string `json:"event"`
-	level int    `json:"volume"`
+	Event string `json:"event"`
+	Level int    `json:"volume"`
 }
 
 // Publish a Play Event from the Player to Redis. This sets the current
@@ -27,8 +27,8 @@ func PublishVolumeEvent(c *redis.Client, level int) error {
 
 	// Generate message payload
 	payload, err := json.Marshal(&publishVolumePayload{
-		event: volumeEvent,
-		level: level,
+		Event: volumeEvent,
+		Level: level,
 	})
 	if err != nil {
 		return err
