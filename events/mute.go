@@ -5,7 +5,6 @@ package events
 import (
 	"encoding/json"
 
-	log "github.com/Sirupsen/logrus"
 	"gopkg.in/redis.v3"
 )
 
@@ -29,7 +28,6 @@ func PublishMuteEvent(c *redis.Client, active bool) error {
 	}
 
 	// Set mute state on Redis
-	log.Infof("Set Mute to: %s", state)
 	if err = c.Set(muteKey, state, 0).Err(); err != nil {
 		return err
 	}

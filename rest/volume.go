@@ -16,7 +16,7 @@ import (
 
 // PUT /volume Request Body
 type volumeUpdateReqBody struct {
-	level int `json:"level" valid:"required"`
+	Level int `json:"level" valid:"required"`
 }
 
 // PUT /volume HTTP Handler
@@ -41,7 +41,7 @@ func VolumeUpdateHandler(c web.C, w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Set the vol redis keys
-	if err := events.PublishVolumeEvent(c.Env["REDIS"].(*redis.Client), rbody.level); err != nil {
+	if err := events.PublishVolumeEvent(c.Env["REDIS"].(*redis.Client), rbody.Level); err != nil {
 		log.Error(err)
 		http.Error(w, http.StatusText(500), 500)
 		return

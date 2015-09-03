@@ -15,7 +15,7 @@ import (
 
 // PUT /mute Request Body
 type muteUpdateReqBody struct {
-	active bool `json:"active" valid:"required"`
+	Active bool `json:"active" valid:"required"`
 }
 
 // PUT /mute HTTP Handler
@@ -40,7 +40,7 @@ func MuteUpdateHandler(c web.C, w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Set the vol redis keys
-	if err := events.PublishMuteEvent(c.Env["REDIS"].(*redis.Client), rbody.active); err != nil {
+	if err := events.PublishMuteEvent(c.Env["REDIS"].(*redis.Client), rbody.Active); err != nil {
 		log.Error(err)
 		http.Error(w, http.StatusText(500), 500)
 		return
