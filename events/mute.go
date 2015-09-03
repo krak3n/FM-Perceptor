@@ -4,15 +4,15 @@ package events
 
 import (
 	"encoding/json"
-	"strconv"
 
+	log "github.com/Sirupsen/logrus"
 	"gopkg.in/redis.v3"
 )
 
 // Play POST request expected JSON payload
 type publishMutePayload struct {
-	event  string `json:"event"`
-	active bool   `json:"mute"`
+	Event  string `json:"event"`
+	Active bool   `json:"mute"`
 }
 
 // Publish a Play Event from the Player to Redis. This sets the current
@@ -21,22 +21,23 @@ type publishMutePayload struct {
 func PublishMuteEvent(c *redis.Client, active bool) error {
 	var err error
 
-	var state int
+	var state string
 	if active {
-		state = 1
+		state = "1"
 	} else {
-		state = 0
+		state = "0"
 	}
 
 	// Set mute state on Redis
-	if err = c.Set(muteKey, strconv.Itoa(state), 0).Err(); err != nil {
+	log.Infof("Set Mute to: %s", state)
+	if err = c.Set(muteKey, state, 0).Err(); err != nil {
 		return err
 	}
 
 	// Generate message payload
 	payload, err := json.Marshal(&publishMutePayload{
-		event:  muteEvent,
-		active: active,
+		Event:  muteEvent,
+		Active: active,
 	})
 	if err != nil {
 		return err
