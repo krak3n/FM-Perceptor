@@ -24,7 +24,7 @@ const (
 
 // Event payload to publish
 type publishEventPayload struct {
-	event string `json:"event"`
-	track string `json:"uri"`
-	user  string `json:"user"`
+	Event string `json:"event"`
+	Track string `json:"uri"`
+	User  string `json:"user"`
 }

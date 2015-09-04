@@ -20,8 +20,8 @@ func PublishPlayEvent(c *redis.Client, track string, user string, start string) 
 	// Execute Transaction
 	for {
 		_, err := tx.Exec(func() error {
-			tx.Set(currentTrackKey, string(track), 0)
-			tx.Set(startTimeKey, string(start), 0)
+			tx.Set(currentTrackKey, track, 0)
+			tx.Set(startTimeKey, start, 0)
 			tx.Set(pauseKey, "0", 0)
 			tx.Del(pauseTimeKey)
 			tx.Del(pauseDurrationKey)
@@ -38,9 +38,9 @@ func PublishPlayEvent(c *redis.Client, track string, user string, start string) 
 
 	// Generate message payload
 	payload, err := json.Marshal(&publishEventPayload{
-		event: playEvent,
-		track: track,
-		user:  user,
+		Event: playEvent,
+		Track: track,
+		User:  user,
 	})
 	if err != nil {
 		return err

@@ -15,7 +15,7 @@ import (
 
 // POST /events/resume JSON Request Body
 type resumeCreateReqBody struct {
-	Durration string `json:"start" valid:"int,required"`
+	Duration string `json:"duration" valid:"string,required"`
 }
 
 // POST /player/resume HTTP Handler
@@ -42,7 +42,7 @@ func ResumeCreateHandler(c web.C, w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Set the resume redis keys
-	if err := events.SetResumeState(c.Env["REDIS"].(*redis.Client), rbody.Durration); err != nil {
+	if err := events.SetResumeState(c.Env["REDIS"].(*redis.Client), rbody.Duration); err != nil {
 		log.Error(err)
 		http.Error(w, http.StatusText(500), 500)
 		return

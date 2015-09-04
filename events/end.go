@@ -27,9 +27,9 @@ func PublishEndEvent(c *redis.Client, track string, user string) error {
 
 	// Generate message payload
 	payload, err := json.Marshal(&publishEventPayload{
-		event: endEvent,
-		track: track,
-		user:  user,
+		Event: endEvent,
+		Track: track,
+		User:  user,
 	})
 	if err != nil {
 		return err
