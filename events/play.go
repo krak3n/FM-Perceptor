@@ -5,6 +5,7 @@ package events
 import (
 	"encoding/json"
 
+	log "github.com/Sirupsen/logrus"
 	"gopkg.in/redis.v3"
 )
 
@@ -14,13 +15,22 @@ import (
 func PublishPlayEvent(c *redis.Client, track string, user string, start string) error {
 	var err error
 
+	// Create content for current key
+	data, err := json.Marshal(&currentTrack{
+		Track: track,
+		User:  user,
+	})
+	if err != nil {
+		log.Errorf("Failed to marshal current key: %s", err)
+	}
+
 	// Create Transaction
 	tx := c.Multi()
 
 	// Execute Transaction
 	for {
 		_, err := tx.Exec(func() error {
-			tx.Set(currentTrackKey, track, 0)
+			tx.Set(currentTrackKey, string(data[:]), 0)
 			tx.Set(startTimeKey, start, 0)
 			tx.Set(pauseKey, "0", 0)
 			tx.Del(pauseTimeKey)

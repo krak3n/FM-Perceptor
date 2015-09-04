@@ -28,3 +28,8 @@ type publishEventPayload struct {
 	Track string `json:"uri"`
 	User  string `json:"user"`
 }
+
+type currentTrack struct {
+	Track string `json:"uri"`
+	User  string `json:"user"`
+}
